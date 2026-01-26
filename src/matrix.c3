@@ -517,7 +517,7 @@ macro void Matrix.comatrix_assign(&self, Matrix* source)
 		-(source.m[1][0] * (source.m[2][1] * source.m[3][2] - source.m[2][2] * source.m[3][1]) -
 		  source.m[2][0] * (source.m[1][1] * source.m[3][2] - source.m[1][2] * source.m[3][1]) +
 		  source.m[3][0] * (source.m[1][1] * source.m[2][2] - source.m[1][2] * source.m[2][1])),
-			
+
 		-(source.m[0][1] * (source.m[2][2] * source.m[3][3] - source.m[2][3] * source.m[3][2]) -
 		  source.m[2][1] * (source.m[0][2] * source.m[3][3] - source.m[0][3] * source.m[3][2]) +
 		  source.m[3][1] * (source.m[0][2] * source.m[2][3] - source.m[0][3] * source.m[2][2])),
@@ -530,7 +530,7 @@ macro void Matrix.comatrix_assign(&self, Matrix* source)
 		(source.m[0][0] * (source.m[2][1] * source.m[3][2] - source.m[2][2] * source.m[3][1]) -
 		 source.m[2][0] * (source.m[0][1] * source.m[3][2] - source.m[0][2] * source.m[3][1]) +
 		 source.m[3][0] * (source.m[0][1] * source.m[2][2] - source.m[0][2] * source.m[2][1])),
-			
+
 		(source.m[0][1] * (source.m[1][2] * source.m[3][3] - source.m[1][3] * source.m[3][2]) -
 		 source.m[1][1] * (source.m[0][2] * source.m[3][3] - source.m[0][3] * source.m[3][2]) +
 		 source.m[3][1] * (source.m[0][2] * source.m[1][3] - source.m[0][3] * source.m[1][2])),
@@ -543,7 +543,7 @@ macro void Matrix.comatrix_assign(&self, Matrix* source)
 		-(source.m[0][0] * (source.m[1][1] * source.m[3][2] - source.m[1][2] * source.m[3][1]) -
 		  source.m[1][0] * (source.m[0][1] * source.m[3][2] - source.m[0][2] * source.m[3][1]) +
 		  source.m[3][0] * (source.m[0][1] * source.m[1][2] - source.m[0][2] * source.m[1][1])),
-			
+
 		-(source.m[0][1] * (source.m[1][2] * source.m[2][3] - source.m[1][3] * source.m[2][2]) -
 		  source.m[1][1] * (source.m[0][2] * source.m[2][3] - source.m[0][3] * source.m[2][2]) +
 		  source.m[2][1] * (source.m[0][2] * source.m[1][3] - source.m[0][3] * source.m[1][2])),
@@ -718,7 +718,7 @@ fn void? Matrix.lu_decomp(&self, Matrix* lower, Matrix* upper) @if(IS_SQUARE) =>
 
 	Type[] temp_row_j = allocator::new_array_aligned(tmem, Type, COLS);
 	Type[] temp_row_i = allocator::new_array_aligned(tmem, Type, COLS);
-		
+
 	for (usz i = 0; i + 1 < ROWS; i++) // diagonal wise
 	{
 		upper.@get_row(i, temp_row_i);
@@ -772,7 +772,7 @@ fn usz? Matrix.lu_decomp_pivot(&self, Matrix* lower, Matrix* upper, Matrix* p) @
 		upper.swap_row(maximum.first, i);
 		if (maximum.first != i) num_swaps++;
 	}
-		
+
 	for (usz i = 0; i + 1 < ROWS; i++) // diagonal wise
 	{
 		upper.@get_row(i, temp_row_i);
@@ -892,7 +892,7 @@ macro @ij_loop(rows, cols; @body(usz i, usz j)) @private
  @require mat1.cols() == mat2.rows() : "Incompatible multiplication"
  @require mat1.type() == mat2.type() : "Incompatible multiplication"
  *>
-macro mul_assign(&dest, mat1, mat2)
+macro mul_assign(dest, mat1, mat2)
 {
 	const N = mat1.cols();
 	const ROWS = mat1.rows();
@@ -912,7 +912,7 @@ macro mul_assign(&dest, mat1, mat2)
  @require $typeof(source).kindof == POINTER
  @require mat.cols() == source.rows() && mat.rows() == source.cols()
  *>
-macro transpose_assign(&mat, source)
+macro transpose_assign(mat, source)
 {
 	$if mat.rows() == 1 ||| mat.cols() == 1:
 	return;
@@ -929,7 +929,7 @@ macro transpose_assign(&mat, source)
  @require $typeof(source).kindof == POINTER
  @require mat.rows() == source.rows() - 1 && mat.cols() == source.cols() : "Incompatible sizes"
  *>
-macro row_slice(&mat, source, usz idx)
+macro row_slice(mat, source, usz idx)
 {
 	if (idx > 0)
 	{
@@ -952,7 +952,7 @@ macro row_slice(&mat, source, usz idx)
  @require $typeof(source).kindof == POINTER
  @require mat.cols() == source.cols() - 1 && mat.rows() == source.rows() : "Incompatible sizes"
  *>
-macro col_slice(&mat, source, usz idx)
+macro col_slice(mat, source, usz idx)
 {
 	mem::copy(
 		&mat.m[0],
@@ -963,7 +963,7 @@ macro col_slice(&mat, source, usz idx)
 		&source.m[idx + 1],
 		$typefrom(source.type()).sizeof * source.rows() * (source.cols() - idx - 1));
 }
-macro apply(&mat, vec) @private
+macro apply(mat, vec) @private
 {
 	$typefrom($typeof(vec).inner)[<mat.rows()>] result;
 	$typeof(vec) row;
@@ -1083,9 +1083,9 @@ macro strassen_mul(r, s, o)
 	*tmp = *m2;
 	tmp.add_assign(*m4);
 	@upsize(tmp, result, HALF_SIZE,0        );
-                                                  
-	*tmp = *m3;                                   
-	tmp.add_assign(*m5);                          
+
+	*tmp = *m3;
+	tmp.add_assign(*m5);
 	@upsize(tmp, result, 0        ,HALF_SIZE);
 
 	*tmp = *m1;
@@ -1115,7 +1115,7 @@ macro @is_pow_2($n) @private @const
  @require self.rows() > 1 && self.cols() > 1 : "Slicing a one-row or one-column matrix is invalid"
  @require $typeof(self).kindof == POINTER
  *>
-macro minor(&self, usz i, usz j)
+macro minor(self, usz i, usz j)
 {
 	@pool()
 	{
@@ -1171,7 +1171,7 @@ macro @identity($size, $Type = double)
 
  @require self.cols() == self.rows() : "Cannot create non-square identity matrix"
  *>
-macro identity_assign(&self)
+macro identity_assign(self)
 {
 	mem::clear(self, $typeof(self.val).sizeof);
 	for (usz x = 0; x < self.cols(); x++) self.m[x][x] = 1;
@@ -1185,7 +1185,7 @@ faultdef MATRIX_INVERSE_DOESNT_EXIST;
  @require $typeof(source).kindof == POINTER
  @require mat.cols() == source.rows() && mat.rows() == source.cols()
  *>
-macro inverse(&mat, source)
+macro inverse(mat, source)
 {
 	$typefrom(source.type()) det = source.determinant();
 	if (det == 0) return MATRIX_INVERSE_DOESNT_EXIST?;
@@ -1203,7 +1203,7 @@ macro inverse(&mat, source)
  @require row_offset <= mat.rows() - result.rows() : "Row offset is out of bounds for source matrix"
  @require col_offset <= mat.cols() - result.cols() : "col offset is out of bounds for source matrix"
  *>
-macro @downsize(&mat, result, usz row_offset = 0, usz col_offset = 0)
+macro @downsize(mat, result, usz row_offset = 0, usz col_offset = 0)
 {
 	for (usz i = 0; i < result.cols(); i++)
 	{
@@ -1220,7 +1220,7 @@ macro @downsize(&mat, result, usz row_offset = 0, usz col_offset = 0)
  @require row_offset <= result.rows() - mat.rows() : "Row offset is out of bounds for source matrix"
  @require col_offset <= result.cols() - mat.cols() : "col offset is out of bounds for source matrix"
  *>
-macro @upsize(&mat, result, usz row_offset = 0, usz col_offset = 0)
+macro @upsize(mat, result, usz row_offset = 0, usz col_offset = 0)
 {
 	for (usz i = 0; i < mat.cols(); i++)
 	{
