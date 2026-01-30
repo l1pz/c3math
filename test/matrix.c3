@@ -1511,7 +1511,10 @@ macro @assert_print(a, b, $msg = "Not equal")
 	io::printfn("expected: %s", b);
 	assert(a == b, $msg);
 }
-macro void round(&mat, double precision = 1000000)
+<*
+	@require $kindof(mat) == TypeKind.POINTER
+*>
+macro void round(mat, double precision = 1000000)
 {
 	foreach (&val : mat.val)
 	{
