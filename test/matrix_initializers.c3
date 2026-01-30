@@ -18,11 +18,11 @@ fn void scaled()
 fn void translated()
 {
 	@assert_print(matrix::translated(vec2),
-		(Matrix3x3){{ 0, 0, 0, 0, 0, 0, -3, 4, 1 }},
+		(Matrix3x3){{ 1, 0, -3, 0, 1, 4, 0, 0, 1 }},
 		"2D translated not equal",
 	);
 	@assert_print(matrix::translated(vec3),
-		(Matrix4x4){{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 5, 1 }},
+		(Matrix4x4){{ 1, 0, 0, 1, 0, 1, 0, -1, 0, 0, 1, 5, 0, 0, 0, 1 }},
 		"3D translated not equal",
 	);
 }

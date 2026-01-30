@@ -21,9 +21,9 @@ macro scaled(scale_vec)
 macro translated(translate_vec)
 {
 	const N = translate_vec.len;
-	Matrix{N+1,N+1, $typefrom($typeof(translate_vec).inner)} result;
-	result.m[^1][:N] = translate_vec[..];
-	result.val[^1] = 1;
+	Matrix{N+1,N+1, $typefrom($typeof(translate_vec).inner)} result
+		= matrix::@identity(N+1, $typefrom($typeof(translate_vec).inner));
+	foreach (i, component : translate_vec) result.m[i][^1] = component;
 	return result;
 }
 <*
